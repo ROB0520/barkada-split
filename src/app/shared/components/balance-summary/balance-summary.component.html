@@ -1,0 +1,22 @@
+<section>
+  <h2>Balances</h2>
+  <ion-list>
+    @for (row of rows(); track row.balance.memberId) {
+      <ion-item>
+        <ion-label>
+          <h2>{{ row.name }}</h2>
+          <p>Paid {{ formatAmount(row.balance.paid) }} · Share {{ formatAmount(row.balance.share) }}</p>
+          @if (row.balance.net < 0) {
+            <p>{{ row.name }} owes {{ formatAmount(-row.balance.net) }}</p>
+          } @else if (row.balance.net > 0) {
+            <p>{{ row.name }} gets back {{ formatAmount(row.balance.net) }}</p>
+          } @else {
+            <p>{{ row.name }} is settled</p>
+          }
+        </ion-label>
+        <ion-note slot="end">{{ formatAmount(row.balance.net) }}</ion-note>
+      </ion-item>
+    }
+  </ion-list>
+  <p>Totals balance to {{ formatAmount(netsTotal()) }}</p>
+</section>

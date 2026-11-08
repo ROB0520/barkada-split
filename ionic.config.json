@@ -1,0 +1,7 @@
+{
+  "name": "barkada-split",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

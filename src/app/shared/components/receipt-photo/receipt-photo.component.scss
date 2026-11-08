@@ -1,0 +1,12 @@
+.receipt-thumb {
+  max-width: 120px;
+  max-height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.receipt-full {
+  display: block;
+  width: 100%;
+  height: auto;
+}

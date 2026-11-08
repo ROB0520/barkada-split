@@ -1,0 +1,31 @@
+<section>
+  <h2>Settle up</h2>
+  @if (plan().length === 0 && recorded().length === 0) {
+    <p>Everyone is settled — no payments needed</p>
+  } @else {
+    @if (plan().length > 0) {
+      <ion-list>
+        @for (payment of plan(); track $index) {
+          <ion-item>
+            <ion-label>{{ sentence(payment) }}</ion-label>
+            <ion-button slot="end" fill="outline" size="small" (click)="confirmPayment(payment)">Mark paid</ion-button>
+          </ion-item>
+        }
+      </ion-list>
+    }
+    @if (recorded().length > 0) {
+      <h3>Recorded payments</h3>
+      <ion-list>
+        @for (payment of recorded(); track payment.id) {
+          <ion-item>
+            <ion-label>
+              <h2>{{ paymentSentence(payment) }}</h2>
+              <p>{{ paymentWhen(payment) }}</p>
+            </ion-label>
+            <ion-button slot="end" fill="clear" size="small" (click)="undoPayment(payment.id)">Undo</ion-button>
+          </ion-item>
+        }
+      </ion-list>
+    }
+  }
+</section>

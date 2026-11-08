@@ -1,0 +1,11 @@
+<ion-list>
+  @for (expense of activity(); track expense.id) {
+    <ion-item (click)="openExpense(expense)" button detail="true">
+      <ion-label>
+        <h2>{{ expense.description }}</h2>
+        <p>{{ groupName(expense) }}</p>
+      </ion-label>
+      <ion-note slot="end">{{ formatAmount(expense.amount) }}</ion-note>
+    </ion-item>
+  }
+</ion-list>

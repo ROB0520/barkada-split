@@ -1,0 +1,126 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>{{ isEdit() ? 'Edit expense' : 'New expense' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-input
+      label="Description"
+      labelPlacement="stacked"
+      placeholder="Expense description"
+      maxlength="60"
+      [counter]="true"
+      [ngModel]="description()"
+      (ngModelChange)="description.set($event)"
+    ></ion-input>
+  </ion-item>
+  @if (descriptionError()) {
+    <ion-item lines="none">
+      <ion-note color="danger">Expense description is required</ion-note>
+    </ion-item>
+  }
+
+  <ion-item>
+    <!-- text so decimals stay intact -->
+    <ion-input
+      label="Amount"
+      labelPlacement="stacked"
+      placeholder="0.00"
+      inputmode="decimal"
+      [ngModel]="amountText()"
+      (ngModelChange)="amountText.set($event)"
+    ></ion-input>
+  </ion-item>
+  @if (formattedPreview() !== null) {
+    <ion-item lines="none">
+      <ion-note>{{ formattedPreview() }}</ion-note>
+    </ion-item>
+  }
+  @if (amountErrorText() !== null) {
+    <ion-item lines="none">
+      <ion-note color="danger">{{ amountErrorText() }}</ion-note>
+    </ion-item>
+  }
+
+  <ion-item>
+    <ion-select
+      label="Payer"
+      labelPlacement="stacked"
+      placeholder="Select payer"
+      [ngModel]="payerId()"
+      (ngModelChange)="payerId.set($event)"
+    >
+      @for (member of orderedMembers(); track member.id) {
+        <ion-select-option [value]="member.id">{{ member.name }}</ion-select-option>
+      }
+    </ion-select>
+  </ion-item>
+  @if (payerError()) {
+    <ion-item lines="none">
+      <ion-note color="danger">Payer must be a group member</ion-note>
+    </ion-item>
+  }
+
+  <ion-item>
+    <ion-label position="stacked">Date</ion-label>
+    <ion-datetime presentation="date" [value]="dateIso()" (ionChange)="onDateChange($event)"></ion-datetime>
+  </ion-item>
+  @if (dateError()) {
+    <ion-item lines="none">
+      <ion-note color="danger">Date must be today or earlier</ion-note>
+    </ion-item>
+  }
+
+  <ion-item>
+    <ion-label>Receipt</ion-label>
+    <ion-button slot="end" fill="clear" (click)="attach()">Take or choose photo</ion-button>
+  </ion-item>
+  @if (receiptPath(); as path) {
+    <ion-item lines="none">
+      <app-receipt-photo [receiptPath]="path" size="thumb" />
+    </ion-item>
+    <ion-item lines="none">
+      <ion-button fill="clear" size="small" (click)="replaceStaged()">Retake/Replace</ion-button>
+      <ion-button fill="clear" size="small" (click)="removeStaged()">Remove</ion-button>
+    </ion-item>
+  }
+  @if (receiptError() !== null) {
+    <ion-item lines="none">
+      <ion-note color="danger">{{ receiptError() }}</ion-note>
+    </ion-item>
+  }
+  @if (galleryFallbackOffered()) {
+    <ion-item lines="none">
+      <ion-button fill="clear" size="small" (click)="useGalleryFallback()">Choose from gallery</ion-button>
+    </ion-item>
+  }
+  @if (receiptNotice() !== null) {
+    <ion-item lines="none">
+      <ion-note>{{ receiptNotice() }}</ion-note>
+    </ion-item>
+  }
+
+  @if (previewShares() !== null) {
+    <ion-list>
+      @for (member of orderedMembers(); track member.id) {
+        <ion-item>
+          <ion-label>{{ member.name }}</ion-label>
+          <ion-note slot="end">{{ formatAmount(previewShares()![member.id]) }}</ion-note>
+        </ion-item>
+      }
+    </ion-list>
+    @if (sharesDiffer()) {
+      <ion-item lines="none">
+        <ion-note>leftover centavos go to the members added first</ion-note>
+      </ion-item>
+    }
+  }
+</ion-content>

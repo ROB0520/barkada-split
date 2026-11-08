@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Home</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (groups.groupCount() === 0) {
+  <div class="empty-state">
+    <p>No groups yet — create your first barkada</p>
+    <ion-button (click)="createGroup()">Create group</ion-button>
+  </div>
+  } @else {
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Overview</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ groups.groupCount() }} groups · {{ expenses.expenseCount() }} expenses</p>
+      <p>Total recorded {{ formatAmount(headlineTotal()) }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Recent activity</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <app-recent-activity [limit]="5"></app-recent-activity>
+    </ion-card-content>
+  </ion-card>
+  }
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Quick actions</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button (click)="createGroup()">Create group</ion-button>
+      <ion-button (click)="recordExpense()">Record expense</ion-button>
+      @if (showZeroGroupHint()) {
+      <p>Recording an expense needs a group first — create one to get started</p>
+      }
+    </ion-card-content>
+  </ion-card>
+</ion-content>

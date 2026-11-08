@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>{{ isEdit() ? 'Rename member' : 'New member' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-input
+      label="Name"
+      labelPlacement="stacked"
+      placeholder="Member name"
+      maxlength="40"
+      [counter]="true"
+      [ngModel]="name()"
+      (ngModelChange)="name.set($event)"
+    ></ion-input>
+  </ion-item>
+  @if (nameError()) {
+    <ion-item lines="none">
+      <ion-note color="danger">Member name is required</ion-note>
+    </ion-item>
+  }
+</ion-content>

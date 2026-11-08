@@ -1,0 +1,8 @@
+@if (src(); as url) {
+  <img
+    [src]="url"
+    alt="Receipt photo"
+    [class.receipt-thumb]="size === 'thumb'"
+    [class.receipt-full]="size === 'full'"
+  />
+}

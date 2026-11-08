@@ -1,0 +1,65 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="backHref()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ expense()?.description ?? 'Expense' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  @if (expense(); as found) {
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ found.description }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>Amount</ion-label>
+      <ion-note slot="end">{{ formatAmount(found.amount) }}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Paid by</ion-label>
+      <ion-note slot="end">{{ payerName() }}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Date</ion-label>
+      <ion-note slot="end">{{ formatDate(found.date) }}</ion-note>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    @for (row of splitRows(); track row.id) {
+    <ion-item>
+      <ion-label>{{ row.name }}</ion-label>
+      <ion-note slot="end">{{ formatAmount(row.share) }}</ion-note>
+    </ion-item>
+    }
+  </ion-list>
+
+  <p>Total {{ formatAmount(found.amount) }} = sum of shares {{ formatAmount(sharesTotal()) }}</p>
+  @if (sharesDiffer()) {
+  <p>leftover centavos go to the members added first</p>
+  }
+
+  <section>
+    @if (receiptSrc() !== null) {
+    <button type="button" (click)="openViewer()" class="receipt-open">
+      <app-receipt-photo [receiptPath]="expense()?.receiptPath" size="full" />
+    </button>
+    <ion-button fill="clear" size="small" (click)="replaceReceipt()">Replace</ion-button>
+    <ion-button fill="clear" size="small" color="danger" (click)="confirmRemoveReceipt()">Remove</ion-button>
+    } @else {
+    <p>No receipt attached</p>
+    <ion-button fill="clear" size="small" (click)="replaceReceipt()">Add receipt</ion-button>
+    }
+  </section>
+  } @else {
+  <div class="missing-expense">
+    <p>Expense not found — it may have been deleted.</p>
+    <ion-button [routerLink]="backHref()" routerDirection="back">Back to group</ion-button>
+  </div>
+  }
+</ion-content>

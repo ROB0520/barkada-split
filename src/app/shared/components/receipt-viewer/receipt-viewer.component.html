@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Receipt</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="zoom-container" [style.touch-action]="'pinch-zoom'">
+    <app-receipt-photo [receiptPath]="receiptPath" size="full" />
+  </div>
+</ion-content>

@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Groups</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Groups</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (groups.groups().length === 0) {
+  <div class="empty-state">
+    <p>No barkadas yet — Create one</p>
+    <ion-button (click)="createGroup()">Create one</ion-button>
+  </div>
+  } @else {
+  <ion-list>
+    @for (group of groups.groups(); track group.id) {
+    <ion-item [routerLink]="['/tabs/groups', group.id]">
+      <ion-label>
+        <h2>{{ group.name }}</h2>
+        @if (group.description !== '') {
+        <p>{{ group.description }}</p>
+        }
+        <p>{{ memberCount(group.id) }} members</p>
+      </ion-label>
+      <ion-icon name="chevron-forward" slot="end"></ion-icon>
+    </ion-item>
+    }
+  </ion-list>
+  }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="createGroup()" aria-label="Create group">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

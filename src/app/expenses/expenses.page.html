@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Expenses</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Expenses</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (expenses.expenseCount() === 0) {
+  <div class="empty-state">
+    <p>No expenses yet — record the first from a group</p>
+  </div>
+  } @else {
+  <app-recent-activity [limit]="20"></app-recent-activity>
+  }
+</ion-content>

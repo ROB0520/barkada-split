@@ -1,0 +1,9 @@
+.zoom-container {
+  overflow: auto;
+  height: 100%;
+  touch-action: pinch-zoom;
+}
+
+.zoom-container img {
+  touch-action: pinch-zoom;
+}

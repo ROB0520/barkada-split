@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>{{ isEdit() ? 'Edit barkada' : 'New barkada' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-input
+      label="Name"
+      labelPlacement="stacked"
+      placeholder="Barkada name"
+      maxlength="60"
+      [counter]="true"
+      [ngModel]="name()"
+      (ngModelChange)="name.set($event)"
+    ></ion-input>
+  </ion-item>
+  @if (nameError()) {
+    <ion-item lines="none">
+      <ion-note color="danger">Group name is required</ion-note>
+    </ion-item>
+  }
+  <ion-item>
+    <ion-textarea
+      label="Description (optional)"
+      labelPlacement="stacked"
+      placeholder="What is this barkada for?"
+      maxlength="280"
+      rows="3"
+      [counter]="true"
+      [ngModel]="description()"
+      (ngModelChange)="description.set($event)"
+    ></ion-textarea>
+  </ion-item>
+</ion-content>

@@ -1,0 +1,97 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/groups"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ group()?.name ?? 'Group' }}</ion-title>
+    <ion-buttons slot="end">
+      @if (group()) {
+      <ion-button (click)="editGroup()" aria-label="Edit group">
+        <ion-icon name="pencil" slot="icon-only"></ion-icon>
+      </ion-button>
+      }
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  @if (group()) {
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ group()?.name }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  @if (group()?.description) {
+  <p class="group-description">{{ group()?.description }}</p>
+  }
+
+  <h2>Members</h2>
+  @if (roster().length === 0) {
+  <div class="empty-roster">
+    <p>No members yet — add the first</p>
+  </div>
+  } @else {
+  <p class="swipe-hint">Swipe a member to rename or remove them.</p>
+  <ion-list>
+    @for (member of roster(); track member.id) {
+    <ion-item-sliding #sliding>
+      <ion-item>
+        <ion-label>{{ member.name }}</ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option (click)="renameMember(member, sliding)">Rename</ion-item-option>
+        <ion-item-option color="danger" (click)="removeMember(member, sliding)">Remove</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+    }
+  </ion-list>
+  }
+  <ion-button (click)="addMember()">
+    <ion-icon name="add" slot="start"></ion-icon>
+    Add member
+  </ion-button>
+
+  <section>
+    <h2>Expenses</h2>
+    <ion-button (click)="addExpense()">
+      <ion-icon name="add" slot="start"></ion-icon>
+      Record expense
+    </ion-button>
+    @if (history().length === 0) {
+    <p>No expenses yet — record the first</p>
+    } @else {
+    <p class="swipe-hint">Swipe an expense to edit or delete it. Tap one to see the details.</p>
+    <ion-list>
+      @for (expense of history(); track expense.id) {
+      <ion-item-sliding #sliding>
+        <ion-item (click)="openExpense(expense)" button detail="true">
+          <ion-label>
+            <h2>{{ expense.description }}</h2>
+            <p>{{ payerName(expense) }}</p>
+            <p>{{ formatDate(expense.date) }}</p>
+          </ion-label>
+          <ion-note slot="end">{{ formatAmount(expense.amount) }}</ion-note>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option (click)="editExpense(expense, sliding)">Edit</ion-item-option>
+          <ion-item-option color="danger" (click)="deleteExpense(expense, sliding)">Delete</ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+      }
+    </ion-list>
+    }
+  </section>
+  <app-balance-summary [groupId]="id"></app-balance-summary>
+  <app-settle-up-plan [groupId]="id"></app-settle-up-plan>
+
+  <ion-button color="danger" fill="outline" (click)="deleteGroup()">
+    <ion-icon name="trash" slot="start"></ion-icon>
+    Delete group
+  </ion-button>
+  } @else {
+  <div class="missing-group">
+    <p>Group not found — it may have been deleted.</p>
+    <ion-button routerLink="/tabs/groups" routerDirection="back">Back to groups</ion-button>
+  </div>
+  }
+</ion-content>
